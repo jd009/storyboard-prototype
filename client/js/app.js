@@ -34,7 +34,7 @@ function onYouTubeIframeAPIReady() {
       end: 14
     },
     events: {
-      'onReady': storyStateMachine.onPlayer2Ready.bind(storyStateMachine),
+      'onReady': storyStateMachine.onPlayerReady.bind(storyStateMachine),
       'onStateChange': storyStateMachine.playerStateListener.bind(storyStateMachine)
     }
     }
@@ -51,7 +51,7 @@ function onYouTubeIframeAPIReady() {
       end: 7
     },
     events: {
-      'onReady': storyStateMachine.onPlayer3Ready.bind(storyStateMachine),
+      'onReady': storyStateMachine.onPlayerReady.bind(storyStateMachine),
       'onStateChange': storyStateMachine.playerStateListener.bind(storyStateMachine)
     }
     }
@@ -121,13 +121,9 @@ function StoryStateMachine(){
     event.target.playVideo();
   }
 
-  this.onPlayer2Ready = function(event){
-    recueCurrentVideo(event);
-
-  }
-
-  this.onPlayer3Ready = function(event){
-    recueCurrentVideo(event);
+  this.onPlayerReady = function(event){
+    event.target.playVideo();
+    event.target.pauseVideo();
   }
 }
 
