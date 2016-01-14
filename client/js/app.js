@@ -65,6 +65,13 @@ function StoryStateMachine(){
       case YT.PlayerState.PAUSED:
         state = 'paused';
         player2.playVideo();
+        event.target.cueVideoById(
+          {
+            'videoId': '8lXdyD2Yzls', //gopher
+            'startSeconds': 0,
+            'endSeconds': 4
+          }
+        );
         break;
       case YT.PlayerState.BUFFERING:
         state = 'buffering';
@@ -93,6 +100,7 @@ function StoryStateMachine(){
       case YT.PlayerState.PAUSED:
         state = 'paused';
         player3.playVideo();
+        this.onPlayer2Ready(event);
         break;
       case YT.PlayerState.BUFFERING:
         state = 'buffering';
@@ -120,6 +128,7 @@ function StoryStateMachine(){
         break;
       case YT.PlayerState.PAUSED:
         state = 'paused';
+        this.onPlayer3Ready(event);
         break;
       case YT.PlayerState.BUFFERING:
         state = 'buffering';
