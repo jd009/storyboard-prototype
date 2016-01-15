@@ -1,64 +1,58 @@
 var VIDEO_HEIGHT = 200;
 var VIDEO_WIDTH = 356;
-var player1;
-var player2;
-var player3;
-var storyStateMachine = new StoryStateMachine();
 
-function onYouTubeIframeAPIReady() {
-  player1 = new YT.Player('player1', {
-    height: VIDEO_HEIGHT,
-    width: VIDEO_WIDTH,
-    videoId: '8lXdyD2Yzls', //gopher
-    playerVars: {
-      controls: 0,
-      showinfo: 0,
-      start: 0,
-      end: 2
-    },
-    events: {
-      'onReady': storyStateMachine.onPlayer1Ready.bind(storyStateMachine),
-      'onStateChange': storyStateMachine.playerStateListener.bind(storyStateMachine)
-    }
-    }
-  );
-
-  player2 = new YT.Player('player2', {
-    height: VIDEO_HEIGHT,
-    width: VIDEO_WIDTH,
-    videoId: '3GJOVPjhXMY', //star wars kid
-    playerVars: {
-      controls: 0,
-      showinfo: 0,
-      start: 9,
-      end: 14
-    },
-    events: {
-      'onReady': storyStateMachine.onPlayerReady.bind(storyStateMachine),
-      'onStateChange': storyStateMachine.playerStateListener.bind(storyStateMachine)
-    }
-    }
-  );
-
-  player3 = new YT.Player('player3', {
-    height: VIDEO_HEIGHT,
-    width: VIDEO_WIDTH,
-    videoId: '-5x5OXfe9KY', //baby
-    playerVars: {
-      controls: 0,
-      showinfo: 0,
-      start: 3,
-      end: 7
-    },
-    events: {
-      'onReady': storyStateMachine.onPlayerReady.bind(storyStateMachine),
-      'onStateChange': storyStateMachine.playerStateListener.bind(storyStateMachine)
-    }
-    }
-  );
+function Frame(playerDiv, videoId, start, end){
+  this.player = null;
+  this.playerDiv = playerDiv;
+  this.videoId = videoId;
+  this.start = start;
+  this.end = end;
 }
 
-function StoryStateMachine(){
+var story = {
+  frames: []
+};
+
+var FRAME1 = 0;
+var FRAME2 = 1;
+var FRAME3 = 2;
+var frame1 = new Frame('player1', '8lXdyD2Yzls', 0, 2);
+story.frames[FRAME1] = frame1;
+var frame2 = new Frame('player2', '3GJOVPjhXMY', 9, 14);
+story.frames[FRAME2] = frame2;
+var frame3 = new Frame('player3', '-5x5OXfe9KY', 3, 7);
+story.frames[FRAME3] = frame3;
+
+var storyStateMachine = new StoryStateMachine(story);
+
+function onYouTubeIframeAPIReady() {
+  var storyFrames = story.frames;
+  for(var i = 0; i < storyFrames.length; i++){
+    storyFrames[i].player =
+      new YT.Player(
+        storyFrames[i].playerDiv,
+        {
+          height: VIDEO_HEIGHT,
+          width: VIDEO_WIDTH,
+          videoId: storyFrames[i].videoId,
+          playerVars: {
+            controls: 0,
+            showinfo: 0,
+            start: storyFrames[i].start,
+            end: storyFrames[i].end
+          },
+          events: {
+            'onReady': storyStateMachine.onPlayerReady.bind(storyStateMachine),
+            'onStateChange': storyStateMachine.playerStateListener.bind(storyStateMachine)
+          }
+        }
+      );
+  }
+}
+
+function StoryStateMachine(story){
+  this.story = story;
+
   this.playerStateListener = function(event){
     var state;
     switch(event.data){
@@ -90,13 +84,13 @@ function StoryStateMachine(){
   };
 
   this.playNextVideo = function(event){
-    var pausedPlayer = event.target.f.id;
-    switch(pausedPlayer){
+    var pausedPlayerDivId = event.target.f.id;
+    switch(pausedPlayerDivId){
       case 'player1':
-        player2.playVideo();
+        this.story.frames[FRAME2].player.playVideo();
         break;
       case 'player2':
-        player3.playVideo();
+        this.story.frames[FRAME3].player.playVideo();
         break;
       case 'player3':
         break;
@@ -117,13 +111,19 @@ function StoryStateMachine(){
     );
   }
 
-  this.onPlayer1Ready = function(event){
-    event.target.playVideo();
-  }
-
   this.onPlayerReady = function(event){
-    event.target.playVideo();
-    event.target.pauseVideo();
+    var readyPlayer = event.target;
+    var readyPlayerDivId = event.target.f.id;
+    switch(readyPlayerDivId){
+      case 'player1':
+        readyPlayer.playVideo();
+        break;
+      case 'player2':
+      case 'player3':
+        readyPlayer.playVideo();
+        readyPlayer.pauseVideo();
+        break;
+    }
   }
 }
 
