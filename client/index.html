@@ -2,16 +2,24 @@
 <html>
   <head>
     <title>Storyboard Prototype</title>
-    <link rel="stylesheet" href="client/lib/bootstrap/dist/css/bootstrap.css">
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js">
+    </script>
+    <link rel="import" href="../bower_components/paper-card/paper-card.html">
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="js/app.js"></script>
   </head>
   <body>
     <h1>StoryBoard</h1>
-    <div id="player1"></div>
-    <div id="player2"></div>
-    <div id="player3"></div>
+    <paper-card heading="Act I">
+      <div class="card-content"><div id="player1"></div></div>
+    </paper-card>
+    <paper-card heading="Act II">
+      <div class="card-content"><div id="player2"></div></div>
+    </paper-card>
+    <paper-card heading="Act III">
+      <div class="card-content"><div id="player3"></div></div>
+    </paper-card>
   </body>
   <footer>
   </footer>

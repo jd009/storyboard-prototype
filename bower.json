@@ -1,0 +1,22 @@
+{
+  "name": "storyboard-prototype",
+  "homepage": "https://github.com/jd009/storyboard-prototype",
+  "description": "Sandbox for app feature experimentation.",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "John DeBlanc"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-elements": "PolymerElements/paper-elements#~1.0.7"
+  }
+}
